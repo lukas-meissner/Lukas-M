@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "bugHunt_vehicle.hpp"
 
@@ -12,9 +13,10 @@ class DistanceSensor
 private:
     std::string position;
     bool active;
+    double measured_distance_m;
 
 public:
-    double measured_distance_m;
+    // double measured_distance_m; <-- This should be private, not public
 
     DistanceSensor(const std::string &sensor_position,
                    double initial_distance_m);
@@ -73,13 +75,13 @@ public:
 class ParkingAssistant
 {
 private:
-    std::vector<DistanceSensor *> sensors;
+    std::vector<std::shared_ptr<DistanceSensor>> sensors;
     double warning_distance_m;
 
 public:
     ParkingAssistant(double warning_distance);
 
-    void add_sensor(DistanceSensor *sensor);
+    void add_sensor(std::shared_ptr<DistanceSensor> sensor);
     void print_warnings() const;
 };
 

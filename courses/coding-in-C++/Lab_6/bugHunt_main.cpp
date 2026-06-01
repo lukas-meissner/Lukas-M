@@ -17,9 +17,13 @@ int main()
     AdaptiveCruiseControl cruise_control(80.0, 15.0);
     ParkingAssistant parking_assistant(1.5);
 
-    parking_assistant.add_sensor(&rear_sensor);
-    parking_assistant.add_sensor(&left_sensor);
-    parking_assistant.add_sensor(&right_sensor);
+    // parking_assistant.add_sensor(&rear_sensor);
+    // parking_assistant.add_sensor(&left_sensor);
+    // parking_assistant.add_sensor(&right_sensor);
+
+    parking_assistant.add_sensor(std::make_shared<DistanceSensor>(&rear_sensor));
+    parking_assistant.add_sensor(std::make_shared<DistanceSensor>(&left_sensor));
+    parking_assistant.add_sensor(std::make_shared<DistanceSensor>(&right_sensor));
 
     std::cout << "--- Initial vehicle status ---\n";
     ego_vehicle.print_status();

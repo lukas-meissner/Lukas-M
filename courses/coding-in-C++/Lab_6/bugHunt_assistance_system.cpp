@@ -45,7 +45,7 @@ bool DistanceSensor::operator<(const DistanceSensor &other) const
 
 bool DistanceSensor::is_exactly_at_warning_distance(double warning_distance) const
 {
-    return measured_distance_m == warning_distance;
+    return measured_distance_m == warning_distance; // <- vgl. von double Werten
 }
 
 void DistanceSensor::print_info() const
@@ -68,10 +68,10 @@ void EmergencyBrakeSystem::evaluate(Vehicle &vehicle,
         return;
     }
 
-    if (front_sensor.get_distance() > critical_distance_m)
+    if (front_sensor.get_distance() < critical_distance_m) // <- war voher: >
     {
         std::cout << "[EmergencyBrakeSystem] Emergency braking triggered.\n";
-        vehicle.brake(30.0);
+        vehicle.brake(30.0); // <- magic number, vorher irgendwo festlegen
     }
 }
 
@@ -98,7 +98,7 @@ void LaneKeepingAssist::evaluate(Vehicle &vehicle) const
     }
     else
     {
-        vehicle.steer(0.0);
+        vehicle.steer(0.0); // <- magic number, vorher irgendwo festlegen
     }
 }
 
@@ -120,17 +120,17 @@ void AdaptiveCruiseControl::evaluate(Vehicle &vehicle,
     if (front_sensor.get_distance() < minimum_distance_m)
     {
         std::cout << "[AdaptiveCruiseControl] Vehicle ahead is close. Accelerating.\n";
-        vehicle.accelerate(5.0);
+        vehicle.accelerate(5.0); // <- magic number, vorher irgendwo festlegen
     }
     else if (vehicle.get_speed() < target_speed_kmh)
     {
         std::cout << "[AdaptiveCruiseControl] Increasing speed.\n";
-        vehicle.accelerate(5.0);
+        vehicle.accelerate(5.0); // <- magic number, vorher irgendwo festlegen
     }
     else if (vehicle.get_speed() > target_speed_kmh)
     {
         std::cout << "[AdaptiveCruiseControl] Reducing speed.\n";
-        vehicle.brake(5.0);
+        vehicle.brake(5.0); // <- magic number, vorher irgendwo festlegen
     }
 }
 
@@ -139,14 +139,14 @@ ParkingAssistant::ParkingAssistant(double warning_distance)
 {
 }
 
-void ParkingAssistant::add_sensor(DistanceSensor *sensor)
+void ParkingAssistant::add_sensor(std::shared_ptr<DistanceSensor> sensor)
 {
     sensors.push_back(sensor);
 }
 
 void ParkingAssistant::print_warnings() const
 {
-    for (DistanceSensor *sensor : sensors)
+    for (const std::shared_ptr<DistanceSensor>& sensor : sensors)
     {
         if (sensor != nullptr &&
             sensor->is_active() &&
