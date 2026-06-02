@@ -37,11 +37,24 @@ public:
     }
 };
 
+class Alarm
+{
+    public:
+        void trigger(float value)
+        {
+            if (value > 30.0f)
+            {
+                std::cout << "Alarm: Temperature is too high!\n";
+            }
+        }
+};
+
 int main()
 {
     TemperatureSensor sensor;
+    Alarm alarm;
 
-    sensor.set_temperature(23.5f);
+    sensor.set_temperature(33.5f); // <- anstatt 23.5f
 
     return 0;
 }

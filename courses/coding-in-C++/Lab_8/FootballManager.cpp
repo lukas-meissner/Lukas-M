@@ -21,7 +21,7 @@ int Player::get_age() const
     return age;
 }
 
-void Player::train(int intensity)
+void Player::train(int intensity) // <- bei train-Klasse ändern auf verletzt oder gesund, dann trainieren oder halt nicht
 {
     if (intensity < 0 || intensity > 100)
     {
@@ -87,7 +87,7 @@ void FootballManager::notify_player(const Player &player, const std::string &mes
     notifier.send(player, message);
 }
 
-void FootballManager::select_strategy(const std::string &strategy)
+void FootballManager::select_strategy(const std::string &strategy) // <- neue Klasse: einmal ableiten von offensive und dann defensive
 {
     if (strategy == "offensive")
     {
